@@ -5,25 +5,34 @@ import NewTicketForm from './NewTicketForm';
 import TicketList from './TicketList';
 import TicketDetail from './TicketDetail';
 import EditTicketForm from './EditTicketForm';
-
+import { connect } from 'react-redux';
 
 class TicketControl extends React.Component {
 
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       formVisibleOnPage: false,  //new ticket form
-      mainTicketList: [],
       selectedTicket: null,
       editing: false // Form for editing ticket
     };
   }
 
   handleAddingNewTicketToList = (newTicket) => {
-    const newMainTicketList = this.state.mainTicketList.concat(newTicket);
-    this.setState({mainTicketList: newMainTicketList,
-                  formVisibleOnPage: false });
+    const { dispatch } = this.props;
+    const { id, names, location, issue } = newTicket;
+    const action = {
+      type: 'ADD_TICKET',
+      id: id,
+      names: names,
+      location: location,
+      issue: issue,
+    }
+    dispatch(action);
+    this.setState({formVisibleOnPage: false});
   }
+
   handleDeletingTicket = (id) => {
     const newMainTicketList = this.state.mainTicketList.filter(ticket => ticket.id !== id);
     this.setState({
@@ -116,5 +125,6 @@ render(){
 }
 
 }
+TicketControl = connect()(TicketControl);
 
 export default TicketControl;
