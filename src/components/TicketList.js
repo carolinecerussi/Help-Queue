@@ -1,44 +1,31 @@
 import React from "react";
 import Ticket from "./Ticket";
 import PropTypes from "prop-types";
-import Card from "react-bootstrap/Card";
-
-
 
 
 function TicketList(props){
-  const ticketListStyledComponentsStyles = {
-    color: '#fdfcfe',
-    backgroundColor: '#0100b0',
-    borderRadius:'15px',
-    fontFamily: 'sans-serif',
-    textAlign: 'center',
-    width: '20rem',
-    marginRight: '800',
-    margin: 'auto',
-    padding: '15px'
-  }
-  
   return (
-
     <React.Fragment>
-      <Card style={ticketListStyledComponentsStyles}>
-            {props.ticketList.map((ticket) =>
-              <Ticket 
-                whenTicketClicked = { props.onTicketSelection }
-                names={ticket.names}
-                location={ticket.location}
-                issue={ticket.issue}
-                id = {ticket.id}
-                key={ticket.id}/>
-                )}
-      </Card>
+      <hr />
+      {/* We now need to map over the values of an object, not an array. */}
+      {Object.values(props.ticketList).map((ticket) =>
+        <Ticket
+          whenTicketClicked = { props.onTicketSelection }
+          names={ticket.names}
+          location={ticket.location}
+          issue={ticket.issue}
+          id={ticket.id}
+          key={ticket.id}/>
+      )}
+      {/* Don't forget to add the curly brace above — otherwise there will be a syntax error. */}
     </React.Fragment>
   );
 }
 
+
 TicketList.propTypes = {
-  ticketList: PropTypes.array,
+  // The PropType below has been updated — it's now an object, not an array.
+  ticketList: PropTypes.object,
   onTicketSelection: PropTypes.func
 };
 

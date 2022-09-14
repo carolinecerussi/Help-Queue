@@ -6,6 +6,7 @@ import TicketList from './TicketList';
 import TicketDetail from './TicketDetail';
 import EditTicketForm from './EditTicketForm';
 import { connect } from 'react-redux';
+import PropTypes from "prop-types";
 
 class TicketControl extends React.Component {
 
@@ -34,7 +35,7 @@ class TicketControl extends React.Component {
   }
 
   handleDeletingTicket = (id) => {
-    const { dispatch } = this.props;
+      const { dispatch } = this.props;
     const action = {
       type: 'DELETE_TICKET',
       id: id
@@ -78,10 +79,10 @@ class TicketControl extends React.Component {
 	  }));
   }
 }
-  handleChangingSelectedTicket = (id) => {
-    const selectedTicket = this.state.mainTicketList.filter(ticket=> ticket.id === id)[0];
-    this.setState({selectedTicket : selectedTicket});
-  }
+handleChangingSelectedTicket = (id) => {
+  const selectedTicket = this.props.mainTicketList[id];
+  this.setState({selectedTicket: selectedTicket});
+}
 
 render(){
   const styledButton = {
@@ -116,12 +117,10 @@ render(){
 		
     buttonText = "Return to Ticket List"; 
 	} else {
-		currentlyVisibleState = 
-    <TicketList 
-      ticketList={this.state.mainTicketList} 
-      onTicketSelection ={this.handleChangingSelectedTicket} />
-
-    buttonText = "Add Ticket" 
+    currentlyVisibleState = <TicketList
+     ticketList={this.props.mainTicketList} 
+     onTicketSelection={this.handleChangingSelectedTicket} />;
+    buttonText = "Add Ticket" ;
 	}
 	return (
 		<React.Fragment>
@@ -132,6 +131,19 @@ render(){
 }
 
 }
-TicketControl = connect()(TicketControl);
+
+TicketControl.propTypes = {
+  mainTicketList: PropTypes.object
+};
+
+const mapStateToProps = state => {
+  return {
+
+        // Key-value pairs of state to be mapped from Redux to React component go here.
+    mainTicketList: state
+  }
+}
+
+TicketControl = connect(mapStateToProps)(TicketControl);
 
 export default TicketControl;
